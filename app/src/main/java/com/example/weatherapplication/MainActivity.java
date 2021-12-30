@@ -3,10 +3,16 @@ package com.example.weatherapplication;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +35,6 @@ public class MainActivity extends Activity {
     private TextInputEditText cityInput ;
     private TextInputEditText codeInput;
     private TextView textView;
-    private JSONObject jsonObject;
     private Button search;
     private String jsonWeather;
     public void onCreate(Bundle savedInstanceState) {
@@ -41,16 +46,32 @@ public class MainActivity extends Activity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); //Async класс
         StrictMode.setThreadPolicy(policy);
     }
+    public String getURL () {
+        return (cityURL + cityInput.getText() + "&units=metric" + apiKey);
+    }
     public void onClickSearch (View view)  {
         Thread thread = new Thread(){
             public void run (){
-                    runOnUiThread(new Runnable() {
+                    runOnUiThread(new Runnable() { // запуск
                         @Override
                         public void run() {
                             try {
-                                OkHTTPActivity okHTTPActivity = new OkHTTPActivity();
-                                String jsonWeather = okHTTPActivity.request("http://api.openweathermap.org/data/2.5/weather?q=Ivanovo&appid=ac2862a2ad769bc608885cf9a31b072c").toString();
-                                textView.setText(jsonWeather);
+                                if (!TextUtils.isEmpty(cityInput.getText().toString())) {
+                                    OkHTTPActivity okHTTPActivity = new OkHTTPActivity();
+                                    String jsonWeather = okHTTPActivity.request(getURL()).toString();
+
+                                        GsonBuilder gsonBuilder = new GsonBuilder();
+                                        gsonBuilder.setPrettyPrinting();
+                                        Gson gson = gsonBuilder.create();
+                                        JsonWeather weather = gson.fromJson(jsonWeather, JsonWeather.class);
+                                        jsonWeather = gson.toJson(weather);
+                                       textView.setText( weather.getMain().get("temp").toString());
+
+
+                                } else {
+                                    Toast checkCity = Toast.makeText(getApplicationContext(),"Пожалуйста введите название населенного пункта", Toast.LENGTH_LONG);
+                                    checkCity.show();
+                                }
                                 System.out.print("Json равен" + jsonWeather);
                             } catch (IOException e) {
                                 e.printStackTrace();
