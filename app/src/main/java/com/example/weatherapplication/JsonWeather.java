@@ -1,16 +1,20 @@
 package com.example.weatherapplication;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
-public class JsonWeather {
-    private Map<String, Object> main;
+public class JsonWeather extends JSONObject {
+    private JsonArray weather;
+    private JsonObject main;
     JsonWeather (){};
-    public Map<String, Object> getMain() {
+    public JsonObject getMain() {
         return main;
     }
+    public JsonArray getWeather() { return weather; }
 }
