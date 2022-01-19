@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private final String CITY_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
     private final String ICON_URL = "http://openweathermap.org/img/wn/";
     private final String URL_DAILY = "https://api.openweathermap.org/data/2.5/onecall?lat=";
+    private final String CURRENT_WEATHER_lanlon = "https://api.openweathermap.org/data/2.5/weather?lat=";
     private final String URL_EXCLUDE = "&exclude=current,minutely,hourly,alerts";
     private final String FINAL_URL_PNG = "@2x.png";
     private TextInputEditText cityInput;
@@ -68,7 +69,11 @@ public class MainActivity extends AppCompatActivity {
     private LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
-            showLocation(location);
+            try {
+                showLocation(location);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {
@@ -78,7 +83,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onProviderEnabled(@NonNull String provider) {
             checkEnabled();
-            showLocation(locationManager.getLastKnownLocation(provider));
+            try {
+                showLocation(locationManager.getLastKnownLocation(provider));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         @Override
@@ -86,17 +95,42 @@ public class MainActivity extends AppCompatActivity {
             checkEnabled();
         }
     };
-        public String showLocation (Location location) {
+        public void getCurrentWeather (String jsonWeather) {
+            GsonBuilder gsonBuilder = new GsonBuilder();
+            gsonBuilder.setPrettyPrinting();
+            Gson gson = gsonBuilder.create();
+            JsonWeather weather = gson.fromJson(jsonWeather, JsonWeather.class);
+            temp_on_celcius.setText(( weather.getMain().get("temp").toString() + "°С"));
+            weatherText.setText(weather.getWeather().get(0).getAsJsonObject().get("main").getAsString());
+            //Сначала получаем массив с помощью get(0) и представляем его как JsonObject.
+            String IdIcon =  weather.getWeather().get(0).getAsJsonObject().get("icon").getAsString();
+            Picasso.get()
+                    .load(ICON_URL + IdIcon + FINAL_URL_PNG)
+                    .into (imageWeather);
+        }
+        public void showLocation (Location location) throws IOException {
             if (location == null) {
-                return null; }
-            else if (location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
+                return; }
+            else if (location.getProvider().equals(LocationManager.GPS_PROVIDER))  {
                 longitude.setText(String.valueOf(location.getLongitude()));
                 latitude.setText(String.valueOf(location.getLatitude()));
-                return (URL_DAILY + String.valueOf(location.getLatitude())
-                        + "&lon="+ String.valueOf(location.getLongitude())+
-                        URL_EXCLUDE + API_KEY);
+                OkHTTPActivity okHTTPActivity = new OkHTTPActivity();
+                String jsonWeather = (String) okHTTPActivity.request ((CURRENT_WEATHER_lanlon + String.valueOf(location.getLatitude())
+                        + "&lon="+ String.valueOf(location.getLongitude()) +"&units=metric"+
+                        URL_EXCLUDE + API_KEY));
+                her.setText(jsonWeather);
+                Thread threadGPSWeather = new Thread(){
+                    public void run (){
+                        runOnUiThread(new Runnable() { // запуск
+                            @Override
+                            public void run() {
+                                    getCurrentWeather(jsonWeather);
+                            }
+                        });
+                    }
+                }; threadGPSWeather.start();
             }
-            return null;
+            return;
         }
         private void checkEnabled () {
             locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -104,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
     public String getCurrentURL() {
         return (CITY_URL + cityInput.getText() + "&units=metric" + API_KEY);
     }
+
     public void onClickSearch (View view) throws IOException {
         OkHTTPActivity okHTTPActivity = new OkHTTPActivity();
         String jsonWeather = okHTTPActivity.request(getCurrentURL()).toString();
@@ -114,19 +149,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
 
                                 if (!TextUtils.isEmpty(cityInput.getText().toString())) {
-                                        GsonBuilder gsonBuilder = new GsonBuilder();
-                                        gsonBuilder.setPrettyPrinting();
-                                        Gson gson = gsonBuilder.create();
-                                        JsonWeather weather = gson.fromJson(jsonWeather, JsonWeather.class);
-                                        temp_on_celcius.setText(( weather.getMain().get("temp").toString() + "°С"));
-                                        weatherText.setText(weather.getWeather().get(0).getAsJsonObject().get("main").getAsString());
-                                    //Сначала получаем массив с помощью get(0) и представляем его как JsonObject.
-                                    String IdIcon =  weather.getWeather().get(0).getAsJsonObject().get("icon").getAsString();
-                                       Picasso.get()
-                                               .load(ICON_URL + IdIcon + FINAL_URL_PNG)
-                                               .into (imageWeather);
-
-
+                                       getCurrentWeather(jsonWeather);
                                 } else {
                                     Toast checkCity = Toast.makeText(getApplicationContext(),"Пожалуйста введите название населенного пункта", Toast.LENGTH_LONG);
                                     checkCity.show();
