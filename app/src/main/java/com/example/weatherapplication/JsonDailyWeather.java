@@ -1,17 +1,19 @@
 package com.example.weatherapplication;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import org.json.JSONObject;
 
 
 public class JsonDailyWeather  {
     private JsonArray daily;
-    private String lat;
+    private JsonObject current;
   //  private List <JsonObject> listDailyWeather;
 
     JsonDailyWeather () {};
-    public String getlat () {
-        return lat;
+    public JsonObject getCurrent () {
+        return current;
     }
     public JsonArray getDaily() {
         return daily;
