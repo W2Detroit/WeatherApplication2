@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                     .load(ICON_URL + IdIcon + FINAL_URL_PNG)
                     .into (imageWeather); */
             }
-            DailyAdapter adapter = new DailyAdapter(this, R.layout.list_item,dailyWeathers);
+            DailyAdapter adapter = new DailyAdapter(this, R.layout.list_item,dailyWeathers, PicassoCollection.getListIconWeather(weather));
             list_of_days.setAdapter(adapter);
             return dailyWeathers;
         }
