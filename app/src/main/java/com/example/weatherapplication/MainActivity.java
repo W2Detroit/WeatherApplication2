@@ -25,6 +25,9 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageWeather,icon_weather;
     private LocationManager locationManager;
     private List<DailyWeather> dailyWeathers = new ArrayList();
+    private ArrayList <String> day_of_week = new ArrayList();
     private ListView list_of_days;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         weatherText = findViewById(R.id.weather);
         name_city = findViewById(R.id.name_city);
         icon_weather = findViewById(R.id.icon_weather);
-        her = findViewById(R.id.her);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE); //обеспечивает доступ к системной службе
         // определения местоположения Android;
         list_of_days = findViewById(R.id.list_of_days);
@@ -114,23 +117,25 @@ public class MainActivity extends AppCompatActivity {
                     .load(ICON_URL + IdIcon + FINAL_URL_PNG)
                     .into (imageWeather);
         }
+
         public List <DailyWeather> getLatLonWeather (String jsonWeather)   {
             GsonBuilder gsonBuilder = new GsonBuilder();
             gsonBuilder.setPrettyPrinting();
             Gson gson = gsonBuilder.create();
             JsonDailyWeather weather = gson.fromJson(jsonWeather, JsonDailyWeather.class);
-
+            Calendar calendar = new GregorianCalendar();
+            calendar.get(Calendar.DAY_OF_WEEK);
+            calendar.roll(calendar.get(Calendar.DAY_OF_WEEK),+1);
             for (Integer i = 0; i <= 7; i++) {
-                dailyWeathers.add (i, new DailyWeather(R.drawable.ic_launcher_background,
+                dailyWeathers.add (i, new DailyWeather(
+
+                        R.drawable.ic_launcher_background,
                         weather.getDaily().get(i).getAsJsonObject().get("temp").getAsJsonObject().get("day").getAsString(),
                         weather.getDaily().get(i).getAsJsonObject().get("temp").getAsJsonObject().get("night").getAsString()
                         ));
-           // her.setText(weather.getDaily().toString());
-           /* Picasso.get()
-                    .load(ICON_URL + IdIcon + FINAL_URL_PNG)
-                    .into (imageWeather); */
             }
-            DailyAdapter adapter = new DailyAdapter(this, R.layout.list_item,dailyWeathers, PicassoCollection.getListIconWeather(weather));
+            DailyAdapter adapter = new DailyAdapter(this, R.layout.list_item,dailyWeathers,
+                    PicassoCollection.getListIconWeather(weather), WeekCollection.getWeekCollection());
             list_of_days.setAdapter(adapter);
             return dailyWeathers;
         }

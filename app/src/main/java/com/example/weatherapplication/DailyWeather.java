@@ -2,6 +2,7 @@ package com.example.weatherapplication;
 
 import com.google.gson.JsonElement;
 
+import java.util.ArrayList;
 import java.util.function.DoubleBinaryOperator;
 
 public class DailyWeather {
@@ -10,7 +11,7 @@ public class DailyWeather {
     private String dayWeather;
     private String nightWeather;
 
-    public DailyWeather(int iconWeather, String dayWeather, String nightWeather) {
+    public DailyWeather( int iconWeather, String dayWeather, String nightWeather) {
         this.iconWeather = iconWeather;
         this.dayWeather = dayWeather;
         this.nightWeather = nightWeather;
@@ -42,11 +43,11 @@ public class DailyWeather {
         this.nightWeather = nightWeather;
     }
 
-    public String getDay_of_the_week() {
+    public  String getDay_of_the_week() {
         return day_of_the_week;
     }
 
-    public void setDay_of_the_week(String day_of_the_week) {
+    public void setDay_of_the_week( String day_of_the_week) {
         this.day_of_the_week = day_of_the_week;
     }
 }

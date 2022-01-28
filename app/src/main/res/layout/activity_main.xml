@@ -68,11 +68,4 @@
         android:layout_height="match_parent">
     </ListView>
 </LinearLayout>
-    <TextView
-        android:id="@+id/her"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/weather"
-        android:layout_marginTop="30dp"
-        android:text="3333f"></TextView>
 </RelativeLayout>
