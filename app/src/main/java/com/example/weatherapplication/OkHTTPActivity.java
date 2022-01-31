@@ -10,7 +10,7 @@ import okhttp3.Response;
     public Object request (String url) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url (url)
+                .url(url)
                 .build();
         Response response = null;
         try {
@@ -21,10 +21,4 @@ import okhttp3.Response;
         }
         return 0;
     }
-
-     public static void main(String[] args) throws IOException {
-         OkHTTPActivity okHTTPActivity = new OkHTTPActivity();
-         String str = okHTTPActivity.request("http://api.openweathermap.org/data/2.5/weather?q=Ivanovo&appid=ac2862a2ad769bc608885cf9a31b072c").toString();
-         System.out.println(str);
-     }
 }
