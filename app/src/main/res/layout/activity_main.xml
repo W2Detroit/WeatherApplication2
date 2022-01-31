@@ -6,16 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity">
-
-    <com.google.android.material.textfield.TextInputEditText
+<EditText
         android:id="@+id/textInputEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:imeOptions="actionSearch"
+         android:singleLine="true"
         android:layout_marginTop="20dp"
         android:hint="@string/name_of_city" />
 <TextView
     android:id="@+id/temperature_on_celcius"
-    android:text="33"
     android:textSize="60dp"
     android:layout_marginTop="45dp"
     android:layout_centerInParent="true"
@@ -25,7 +25,6 @@
     <TextView
         android:id="@+id/weather"
         android:textSize="30dp"
-        android:text="Lalalalal"
         android:layout_centerInParent="true"
         android:layout_below="@+id/temperature_on_celcius"
         android:layout_width="wrap_content"
@@ -47,19 +46,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         ></ImageView>
-<Button
-    android:id="@+id/search"
-    android:layout_centerInParent="true"
-    android:onClick="onClickSearch"
-    android:hint="@string/search"
-    android:layout_gravity="center"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    >
-</Button>
+
+
 <LinearLayout
+    android:layout_below="@+id/imageWeather"
+    android:layout_marginTop="50dp"
     android:orientation="horizontal"
-    android:layout_below="@+id/search"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ListView

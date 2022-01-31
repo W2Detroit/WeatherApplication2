@@ -10,11 +10,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class DailyAdapter extends ArrayAdapter<DailyWeather> {
     private LayoutInflater inflater;
