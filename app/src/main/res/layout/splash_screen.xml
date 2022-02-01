@@ -2,5 +2,31 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+<RelativeLayout
+    android:background="#708090"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <ImageView
+        android:src="@drawable/weather_icon"
+        android:id="@+id/imageSplash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></ImageView>
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageSplash"
+        android:layout_centerInParent="true"
+        android:text="@string/app_name"
+        android:textSize="40dp"
+        ></TextView>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_name"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp"
+        ></ProgressBar>
+</RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

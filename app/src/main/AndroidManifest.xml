@@ -15,12 +15,18 @@
         android:theme="@style/Theme.WeatherApplication">
         <activity
             android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
+        <activity android:name=".SplashScreen"
+            android:theme="@style/Theme.Design.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER">
+                </category>
             </intent-filter>
+
         </activity>
     </application>
 
